@@ -1,0 +1,447 @@
+.reading-progress {
+    position: fixed;
+    z-index: 100;
+    left: 0;
+    top: 0;
+    width: var(--reading);
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary), var(--gold));
+    transition: width .1s linear
+}
+
+.icon-button {
+    border: 1px solid var(--line);
+    background: var(--surface);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    cursor: pointer
+}
+
+.primary-btn,
+.ghost-btn {
+    border: 0;
+    border-radius: 999px;
+    padding: 12px 18px;
+    font-weight: 800;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px
+}
+
+.primary-btn {
+    background: var(--primary);
+    color: var(--bg);
+    box-shadow: 0 10px 24px color-mix(in srgb, var(--primary), transparent 70%)
+}
+
+.ghost-btn {
+    background: var(--surface);
+    border: 1px solid var(--line)
+}
+
+.search-box {
+    position: relative;
+    margin: 22px 0
+}
+
+.search-box input {
+    width: 100%;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--text);
+    border-radius: 18px;
+    padding: 15px 18px;
+    box-shadow: var(--shadow)
+}
+
+.prophet-card {
+    position: relative;
+    overflow: hidden;
+    min-height: 235px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 18px;
+    cursor: pointer;
+    box-shadow: 0 10px 34px rgba(25, 45, 37, .07);
+    transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease
+}
+
+.prophet-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow);
+    border-color: color-mix(in srgb, var(--gold), transparent 45%)
+}
+
+.card-preview {
+    height: 88px;
+    border-radius: 16px;
+    margin: -4px -4px 16px;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, color-mix(in srgb, var(--primary), transparent 70%), color-mix(in srgb, var(--gold), transparent 72%))
+}
+
+.card-preview span {
+    position: absolute;
+    font-size: 2rem;
+    filter: saturate(.75);
+    animation: miniFloat 5s ease-in-out infinite
+}
+
+.card-preview span:nth-child(1) {
+    left: 18%;
+    top: 30%
+}
+
+.card-preview span:nth-child(2) {
+    right: 16%;
+    top: 18%;
+    animation-delay: -2s
+}
+
+.card-preview span:nth-child(3) {
+    left: 46%;
+    bottom: 5%;
+    animation-delay: -3.4s
+}
+
+.card-num {
+    font-size: .75rem;
+    color: var(--gold);
+    font-weight: 800
+}
+
+.prophet-card h3 {
+    margin: 5px 0 2px
+}
+
+.card-ar {
+    font-family: "Times New Roman", serif;
+    color: var(--gold);
+    font-size: 1.05rem
+}
+
+.prophet-card p {
+    color: var(--muted);
+    font-size: .88rem;
+    line-height: 1.5;
+    margin: 8px 0 0
+}
+
+.tabs {
+    position: sticky;
+    top: calc(var(--topbar) + 8px);
+    z-index: 20;
+    display: flex;
+    gap: 7px;
+    overflow: auto;
+    background: color-mix(in srgb, var(--bg), transparent 10%);
+    backdrop-filter: blur(12px);
+    padding: 8px 0 10px;
+    margin-bottom: 20px
+}
+
+.tab-button {
+    white-space: nowrap;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    padding: 9px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: .88rem
+}
+
+.tab-button.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: var(--bg)
+}
+
+.story-chapter {
+    margin: 32px 0
+}
+
+.story-chapter h2 {
+    margin-bottom: 12px
+}
+
+.story-chapter p {
+    font-size: 1.04rem
+}
+
+.ayah-block {
+    border: 1px solid color-mix(in srgb, var(--gold), transparent 45%);
+    background: linear-gradient(145deg, color-mix(in srgb, var(--surface-solid), transparent 4%), color-mix(in srgb, var(--gold), transparent 94%));
+    border-radius: 22px;
+    margin: 22px 0;
+    overflow: hidden;
+    box-shadow: 0 12px 35px rgba(55, 47, 31, .06)
+}
+
+.ayah-toggle {
+    width: 100%;
+    border: 0;
+    background: transparent;
+    text-align: left;
+    padding: 16px 18px;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    cursor: pointer
+}
+
+.ayah-toggle strong {
+    display: block
+}
+
+.ayah-ref {
+    color: var(--gold);
+    font-size: .85rem;
+    font-weight: 800
+}
+
+.ayah-content {
+    display: none;
+    padding: 0 18px 20px
+}
+
+.ayah-block.open .ayah-content {
+    display: block
+}
+
+.ayah-arabic {
+    font-family: "Times New Roman", serif;
+    direction: rtl;
+    text-align: right;
+    font-size: clamp(1.5rem, 3vw, 2.05rem);
+    line-height: 2.05;
+    margin: 14px 0 18px
+}
+
+.ayah-meaning {
+    padding: 14px;
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--primary), transparent 94%);
+    color: var(--muted)
+}
+
+.ayah-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 14px
+}
+
+.all-ayahs {
+    margin-top: 50px;
+    padding-top: 25px;
+    border-top: 1px solid var(--line)
+}
+
+.ayah-index {
+    display: grid;
+    gap: 8px
+}
+
+.ayah-index button {
+    border: 1px solid var(--line);
+    background: var(--surface);
+    border-radius: 14px;
+    padding: 12px 14px;
+    text-align: left;
+    cursor: pointer
+}
+
+.dua-card,
+.hadith-card,
+.fact-card,
+.audio-card {
+    border: 1px solid var(--line);
+    background: var(--surface);
+    border-radius: 22px;
+    padding: 20px;
+    margin: 14px 0;
+    box-shadow: 0 10px 30px rgba(25, 45, 37, .05)
+}
+
+.dua-arabic {
+    font-family: "Times New Roman", serif;
+    direction: rtl;
+    text-align: right;
+    font-size: 2rem;
+    line-height: 1.9
+}
+
+.source-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    color: var(--muted);
+    font-size: .85rem
+}
+
+.badge {
+    display: inline-flex;
+    padding: 4px 9px;
+    border-radius: 999px;
+    font-size: .72rem;
+    font-weight: 800;
+    background: color-mix(in srgb, var(--primary), transparent 88%);
+    color: var(--primary)
+}
+
+.badge.gold {
+    background: color-mix(in srgb, var(--gold), transparent 84%);
+    color: var(--gold)
+}
+
+.fact-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px
+}
+
+.fact-value {
+    font-size: 2rem;
+    font-weight: 850
+}
+
+.ref-chips {
+    display: flex;
+    gap: 7px;
+    flex-wrap: wrap
+}
+
+.ref-chip {
+    border: 1px solid var(--line);
+    background: var(--surface);
+    border-radius: 999px;
+    padding: 6px 10px;
+    cursor: pointer
+}
+
+.audio-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap
+}
+
+.audio-controls input[type=range] {
+    flex: 1;
+    min-width: 140px
+}
+
+.audio-time {
+    font-variant-numeric: tabular-nums;
+    font-size: .8rem;
+    color: var(--muted)
+}
+
+.article-footer-nav button {
+    border: 1px solid var(--line);
+    background: var(--surface);
+    border-radius: 18px;
+    padding: 16px;
+    text-align: left;
+    cursor: pointer
+}
+
+.empty-note {
+    padding: 22px;
+    border-radius: 18px;
+    background: color-mix(in srgb, var(--gold), transparent 92%);
+    border: 1px solid color-mix(in srgb, var(--gold), transparent 65%)
+}
+
+.ayah-meaning p {
+    margin: .5rem 0 .6rem;
+    color: var(--text);
+    line-height: 1.75
+}
+
+.ayah-meaning small {
+    display: block;
+    color: var(--muted);
+    line-height: 1.5
+}
+
+.music-button.playing {
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary), transparent 84%);
+    border-color: color-mix(in srgb, var(--primary), transparent 45%)
+}
+
+.music-dock {
+    position: fixed;
+    right: 22px;
+    top:90px;
+    bottom:auto;
+    z-index: 80;
+    max-width: min(520px, calc(100vw - 32px));
+    display: none
+}
+
+.music-dock.open {
+    display: block
+}
+
+.music-panel {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    background: color-mix(in srgb, var(--surface-solid), transparent 4%);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(14px)
+}
+
+.music-panel>div {
+    display: grid;
+    gap: 3px
+}
+
+.music-panel small {
+    display: block;
+    max-width: 340px;
+    color: var(--muted);
+    font-size: .76rem;
+    line-height: 1.35
+}
+
+.music-main {
+    width: 42px;
+    height: 42px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--primary);
+    color: var(--bg);
+    font-weight: 900;
+    cursor: pointer
+}
+
+.music-meta {
+    min-width: 80px
+}
+
+.music-meta span {
+    font-size: .75rem;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums
+}
+
+.music-panel input[data-music-progress] {
+    width: 110px
+}
+
+.music-panel input[data-music-volume] {
+    width: 80px
+}
