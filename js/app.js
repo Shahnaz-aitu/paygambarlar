@@ -12,9 +12,37 @@ function ayahMeaningFor(ref,fallback=''){const item=window.quranMeaning?.[ref];r
 function ayahBlock(ref,title,meaning='',open=false){const translated=ayahMeaningFor(ref,meaning);return `<section class="ayah-block ${open?'open':''}"><button class="ayah-toggle" data-ayah-toggle><span><strong>${esc(title)}</strong><span class="ayah-ref">${esc(refLabel(ref))}</span></span><span>⌄</span></button><div class="ayah-content"><div class="ayah-arabic" lang="ar">${arabicFor(ref)}</div><div class="ayah-meaning"><strong>${t('meaning')}:</strong><p>${esc(translated)}</p><small>${esc(t('translationNote'))}</small></div><div class="ayah-actions"><a class="ghost-btn" href="${quranUrl(ref)}" target="_blank" rel="noopener">${t('quranLink')} ↗</a></div></div></section>`}
 function card(p){const icons=preview[p.id]||['✦','☾','❋'];return `<article class="prophet-card" data-prophet-link="${p.id}" tabindex="0"><div class="card-preview" aria-hidden="true">${icons.map(x=>`<span>${x}</span>`).join('')}</div><span class="card-num">${String(p.number).padStart(2,'0')}</span><h3>${esc(p.name[currentLang])}</h3><div class="card-ar">${p.name.ar}</div><p>${esc(p.description[currentLang])}</p></article>`}
 function renderHome(){activeTab='story';document.body.removeAttribute('data-prophet');loadProphetScene(null);renderNav();app.innerHTML=`<div class="content-wrap"><section class="hero"><div class="hero-copy"><div class="hero-kicker">${t('tagline')}</div><h1>${t('title')}</h1><p>${t('heroText')}</p><div class="hero-actions"><button class="primary-btn" data-prophet-link="adam">${t('start')} →</button><a class="ghost-btn" href="#prophetsGrid">25 ${t('prophetsCount').replace('25 ','')}</a></div></div></section><section class="home-section" id="prophetsGrid"><h2>${t('chooseStory')}</h2><div class="search-box"><input id="prophetSearch" placeholder="${esc(t('search'))}" autocomplete="off"></div><div id="cardsGrid" class="cards-grid">${window.prophetsData.map(card).join('')}</div></section></div>`;const input=document.getElementById('prophetSearch');input.addEventListener('input',()=>{const q=input.value.trim().toLocaleLowerCase(currentLang==='kk'?'kk-KZ':'ru-RU');document.getElementById('cardsGrid').innerHTML=window.prophetsData.filter(p=>(p.name[currentLang]+' '+p.name.ar+' '+p.description[currentLang]).toLocaleLowerCase().includes(q)).map(card).join('')})}
-function renderStory(p){const chapters=p.chapters[currentLang];let out='';chapters.forEach((c,i)=>{out+=`<section class="story-chapter"><h2>${esc(c.title)}</h2><p>${esc(c.text)}</p></section>`;if(p.keyAyahs[i])out+=ayahBlock(p.keyAyahs[i],c.title,'',i===0)});out+=`<section class="all-ayahs"><h2>${t('allAyahs')}</h2><div class="ayah-index">${p.allAyahs.map((r,i)=>`<button data-scroll-ayah="all-${p.id}-${i}"><span class="ayah-ref">${String(i+1).padStart(2,'0')}</span> — ${esc(refLabel(r))}</button>`).join('')}</div><div style="margin-top:16px">${p.allAyahs.map((r,i)=>`<div id="all-${p.id}-${i}">${ayahBlock(r,refLabel(r),'')}</div>`).join('')}</div></section>`;return out}
+function renderStory(p){const chapters=p.chapters[currentLang];let out='';chapters.forEach((c,i)=>{out+=`<section class="story-chapter"><h2>${esc(c.title)}</h2><p>${esc(c.text)}</p></section>`;if(p.keyAyahs[i])out+=ayahBlock(p.keyAyahs[i],c.title,'')});out+=`<section class="all-ayahs"><h2>${t('allAyahs')}</h2><div class="ayah-index">${p.allAyahs.map((r,i)=>`<button data-scroll-ayah="all-${p.id}-${i}"><span class="ayah-ref">${String(i+1).padStart(2,'0')}</span> — ${esc(refLabel(r))}</button>`).join('')}</div><div style="margin-top:16px">${p.allAyahs.map((r,i)=>`<div id="all-${p.id}-${i}">${ayahBlock(r,refLabel(r),'')}</div>`).join('')}</div></section>`;return out}
 function renderDua(p){if(!p.dua)return`<div class="empty-note">${t('noDua')}</div>`;return `<article class="dua-card"><div class="source-row"><span class="badge gold">Құран ${p.dua.ref}</span></div><div class="dua-arabic">${p.dua.arabic}</div><p>${esc(p.dua[currentLang])}</p><a class="ghost-btn" target="_blank" rel="noopener" href="${quranUrl(p.dua.ref)}">${t('quranLink')} ↗</a></article>`}
-function renderHadith(p){const h=p.hadith;return `<article class="hadith-card"><div class="source-row"><span class="badge">${esc(h.collection)}</span><span class="badge gold">${h.number==='—'?'—':'№ '+esc(h.number)}</span><span>${t('grade')}: ${esc(h.grade)}</span></div><p>${esc(h[currentLang])}</p>${h.url?`<a class="ghost-btn" href="${h.url}" target="_blank" rel="noopener">${t('source')} ↗</a>`:''}</article>`}
+function renderHadith(p) {
+  const hadiths = p.hadith || [];
+
+  if (!hadiths.length) {
+    return `
+      <article class="hadith-card">
+        <p>
+          ${
+            currentLang === 'ru'
+              ? 'Достоверные хадисы пока не добавлены.'
+              : 'Сенімді хадистер әзірге қосылмаған.'
+          }
+        </p>
+      </article>
+    `;
+  }
+
+  return hadiths.map(h => `
+    <article class="hadith-card">
+
+      <div class="source-row">
+
+        <span class="badge">
+          ${esc(h.collection)}
+        </span>
+
+        <span class="badge gold">
+          ${h.number === '—'
+       ? '—'  : '№ ' + esc(h.number)} </span> <span>  ${t('grade')}: ${esc(h.grade)} </span> </div> <p>  ${esc(h[currentLang])} </p> ${h.url? `<a class="ghost-btn"href="${h.url}"target="_blank"rel="noopener"> ${t('source')} ↗</a>` : ''} </article> `).join('');}
 function renderFacts(p){const surahs=p.facts.relatedSurahs.map(s=>window.surahNames[s]||s).join(' · ');let reliability=t('reliabilityText');return `<div class="fact-grid"><article class="fact-card"><span class="badge">${t('fact')}</span><div class="fact-value">${p.facts.mentionCount}</div><p>${t('mentioned')} — ${p.facts.mentionCount} ${t('times')}.</p></article><article class="fact-card"><span class="badge gold">${t('relatedSurahs')}</span><p>${esc(surahs)}</p></article></div><article class="fact-card"><h3>${t('directMentions')}</h3><p class="ref-chips">${p.facts.mentionRefs.map(r=>`<button class="ref-chip" data-open-ref="${r}">${esc(r)}</button>`).join('')}</p><p class="source-row">${t('mentionLinksNote')}</p></article><article class="fact-card"><span class="badge gold">${t('reliability')}</span><p>${esc(reliability)}</p></article>`}
 function bodyFor(p){if(activeTab==='dua')return renderDua(p);if(activeTab==='hadith')return renderHadith(p);if(activeTab==='facts')return renderFacts(p);return renderStory(p)}
 function renderProphet(id){const p=window.prophetsData.find(x=>x.id===id);if(!p){renderHome();return}document.body.classList.remove('menu-open');loadProphetScene(id);renderNav();const i=window.prophetsData.indexOf(p),prev=window.prophetsData[i-1],next=window.prophetsData[i+1];app.innerHTML=`<article class="article-shell"><header class="article-head"><div class="article-num">${String(p.number).padStart(2,'0')} / 25</div><div class="article-ar">${p.name.ar}</div><h1>${esc(p.name[currentLang])}</h1><p class="article-desc">${esc(p.description[currentLang])}</p></header><nav class="tabs" aria-label="Tabs"><button class="tab-button ${activeTab==='story'?'active':''}" data-tab="story">${t('story')}</button><button class="tab-button ${activeTab==='dua'?'active':''}" data-tab="dua">${t('dua')}</button><button class="tab-button ${activeTab==='hadith'?'active':''}" data-tab="hadith">${t('hadith')}</button><button class="tab-button ${activeTab==='facts'?'active':''}" data-tab="facts">${t('facts')}</button></nav><div id="tabBody">${bodyFor(p)}</div><nav class="article-footer-nav">${prev?`<button data-prophet-link="${prev.id}">← ${t('prev')}<br><strong>${esc(prev.name[currentLang])}</strong></button>`:'<span></span>'}${next?`<button data-prophet-link="${next.id}">${t('next')} →<br><strong>${esc(next.name[currentLang])}</strong></button>`:'<span></span>'}</nav></article>`;app.focus({preventScroll:true})}
